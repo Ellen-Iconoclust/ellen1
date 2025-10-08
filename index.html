@@ -306,6 +306,7 @@
             transform-origin: left center;
             opacity: 0;
             transition: opacity 0.5s ease;
+            z-index: 0;
         }
 
         .skill-line.active {
@@ -517,7 +518,7 @@
             100% { transform: scale(1); }
         }
 
-        /* Responsive Design */
+        /* Mobile Responsive Design */
         @media (max-width: 768px) {
             .intro {
                 flex-direction: column;
@@ -548,11 +549,100 @@
             .skills-container {
                 gap: 40px;
                 min-height: 500px;
+                flex-direction: column;
+                align-items: center;
             }
             
             .skill-circle {
                 width: 150px;
                 height: 150px;
+            }
+            
+            .skill-items-container {
+                position: relative;
+                height: auto;
+                min-height: 300px;
+                margin-top: 20px;
+            }
+            
+            .skill-item {
+                position: static;
+                margin: 10px;
+                opacity: 0;
+                transform: scale(0);
+            }
+            
+            .skill-item.active {
+                opacity: 1;
+                transform: scale(1);
+                position: static;
+            }
+            
+            .skill-line {
+                display: none;
+            }
+            
+            .common-skills {
+                grid-template-columns: 1fr;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .collab-section {
+                padding: 60px 0;
+            }
+            
+            .collab-text {
+                font-size: 2rem;
+            }
+            
+            .collab-subtext {
+                font-size: 1rem;
+            }
+            
+            .section-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .profile-img-container {
+                width: 180px;
+                height: 180px;
+            }
+            
+            h1 {
+                font-size: 2.2rem;
+            }
+            
+            .catchphrase {
+                font-size: 1rem;
+            }
+            
+            .social-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 1.1rem;
+            }
+            
+            .skill-circle {
+                width: 130px;
+                height: 130px;
+            }
+            
+            .skill-circle h3 {
+                font-size: 1.2rem;
+            }
+            
+            .skill-circle i {
+                font-size: 2rem;
+            }
+            
+            .start-project-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -569,7 +659,13 @@
             <div class="intro">
                 <div class="profile-section">
                     <div class="profile-img-container">
-                        <img src="https://avatars.githubusercontent.com/u/123456789?v=4" alt="Ellen" class="profile-img">
+                        <!-- 
+                            TO ADD YOUR OWN IMAGE:
+                            Replace "profile.png" with your image filename
+                            Make sure your image is in the same folder as this HTML file
+                            Or use a full path like "images/profile.png" if in a subfolder
+                        -->
+                        <img src="profile.png" alt="Ellen" class="profile-img" onerror="this.src='https://avatars.githubusercontent.com/u/123456789?v=4'">
                     </div>
                 </div>
                 <div class="text-section">
@@ -669,8 +765,6 @@
                         <i class="fab fa-docker"></i>
                         <span>Docker</span>
                     </div>
-                    
-                    <!-- Lines will be created dynamically -->
                 </div>
             </div>
             <h3 style="text-align: center; margin-bottom: 30px; animation: fadeIn 0.8s ease 0.7s forwards; opacity: 0;">Common Skills</h3>
@@ -748,10 +842,10 @@
                             A Cross-platform Mobile App made especially for college students to socialize with other students and record all their Academic Works in a single place.
                         </p>
                         <div class="tech-stack">
-                            <span class="tech-item">D3.js</span>
-                            <span class="tech-item">Python</span>
+                            <span class="tech-item">React Native</span>
                             <span class="tech-item">Flask</span>
-                            <span class="tech-item">SQLite</span>
+                            <span class="tech-item">PostgreSQL</span>
+                            <span class="tech-item">Firebase</span>
                         </div>
                     </div>
                 </div>
@@ -851,8 +945,8 @@
                 const x = circleCenterX + Math.cos(angle) * skill.distance;
                 const y = circleCenterY + Math.sin(angle) * skill.distance;
                 
-                skillEl.style.left = `${x - 60}px`;
-                skillEl.style.top = `${y - 20}px`;
+                skillEl.style.left = `${x - skillEl.offsetWidth / 2}px`;
+                skillEl.style.top = `${y - skillEl.offsetHeight / 2}px`;
                 
                 // Create line from circle to skill
                 const line = document.createElement('div');
@@ -870,65 +964,70 @@
             });
         }
         
-        function showSkills(skills, circle) {
-            // Reset any active skills
-            resetSkills();
-            
-            // Position and show skills
-            positionSkills(circle, skills);
-            
-            // Animate skills and lines in
-            setTimeout(() => {
+        function toggleSkills(circle, skills) {
+            if (activeSkills.length > 0) {
                 activeSkills.forEach(skill => {
-                    skill.classList.add('active');
+                    document.getElementById(skill.id).classList.remove('active');
                 });
-                
-                lines.forEach(line => {
-                    line.classList.add('active');
-                });
-            }, 50);
-        }
-        
-        function resetSkills() {
-            // Hide all skills and remove lines
-            activeSkills.forEach(skill => {
-                skill.classList.remove('active');
-            });
-            
-            lines.forEach(line => {
-                line.remove();
-            });
-            
-            activeSkills = [];
-            lines = [];
-        }
-        
-        frontendCircle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (activeSkills.length > 0 && activeSkills[0].id === 'skillJs') {
-                resetSkills();
-            } else {
-                showSkills(frontendSkills, frontendCircle);
+                activeSkills = [];
+                lines.forEach(line => line.remove());
+                lines = [];
+                return;
             }
+
+            positionSkills(circle, skills);
+            activeSkills = skills;
+
+            skills.forEach(skill => {
+                const skillEl = document.getElementById(skill.id);
+                skillEl.classList.add('active');
+
+                // Draw lines
+                const line = document.createElement('div');
+                line.classList.add('skill-line');
+                skillItemsContainer.appendChild(line);
+
+                const circleRect = circle.getBoundingClientRect();
+                const containerRect = skillItemsContainer.getBoundingClientRect();
+                const skillRect = skillEl.getBoundingClientRect();
+
+                const x1 = circleRect.left + circleRect.width / 2 - containerRect.left;
+                const y1 = circleRect.top + circleRect.height / 2 - containerRect.top;
+                const x2 = skillRect.left + skillRect.width / 2 - containerRect.left;
+                const y2 = skillRect.top + skillRect.height / 2 - containerRect.top;
+
+                const length = Math.hypot(x2 - x1, y2 - y1);
+                const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
+
+                line.style.width = `${length}px`;
+                line.style.left = `${x1}px`;
+                line.style.top = `${y1}px`;
+                line.style.transform = `rotate(${angle}deg)`;
+                line.classList.add('active');
+
+                lines.push(line);
+            });
+        }
+
+        frontendCircle.addEventListener('click', () => {
+            toggleSkills(frontendCircle, frontendSkills);
         });
-        
-        backendCircle.addEventListener('click', (e) => {
-            e.stopPropagation();
-            if (activeSkills.length > 0 && activeSkills[0].id === 'skillPython') {
-                resetSkills();
-            } else {
-                showSkills(backendSkills, backendCircle);
-            }
+
+        backendCircle.addEventListener('click', () => {
+            toggleSkills(backendCircle, backendSkills);
         });
-        
+
         // Close skills when clicking outside
-        document.addEventListener('click', () => {
-            resetSkills();
-        });
-        
-        // Prevent skill items from closing when clicked
-        skillItemsContainer.addEventListener('click', (e) => {
-            e.stopPropagation();
+        document.addEventListener('click', (e) => {
+            if (!frontendCircle.contains(e.target) && !backendCircle.contains(e.target) && 
+                !skillItemsContainer.contains(e.target)) {
+                activeSkills.forEach(skill => {
+                    document.getElementById(skill.id).classList.remove('active');
+                });
+                activeSkills = [];
+                lines.forEach(line => line.remove());
+                lines = [];
+            }
         });
     </script>
 </body>
