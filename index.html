@@ -45,10 +45,21 @@
             line-height: 1.6;
         }
 
+        /* Dark mode gradient background */
+        body:not(.light-mode) {
+            background: linear-gradient(135deg, #0a0a2a 0%, #000033 25%, #0a0a0a 50%, #000033 75%, #0a0a2a 100%);
+        }
+
+        .light-mode {
+            background: var(--dark);
+        }
+
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
 
         /* Theme Toggle */
@@ -210,7 +221,7 @@
 
         .social-icon:hover {
             transform: translateY(-8px) scale(1.1);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.8), 0 0 50px rgba(152, 136, 255, 0.6);
             background: rgba(0, 168, 255, 0.2);
         }
 
@@ -314,8 +325,8 @@
 
         .skill-circle:hover {
             transform: scale(1.1);
-            box-shadow: var(--glow);
-            border-color: rgba(0, 168, 255, 0.6);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.9), 0 0 60px rgba(152, 136, 255, 0.7);
+            border-color: rgba(0, 168, 255, 0.8);
         }
 
         .skill-circle h3 {
@@ -369,8 +380,8 @@
 
         .skill-item:hover {
             transform: scale(1.15);
-            box-shadow: var(--glow);
-            border-color: rgba(0, 168, 255, 0.6);
+            box-shadow: 0 0 20px rgba(0, 168, 255, 0.8), 0 0 40px rgba(152, 136, 255, 0.6);
+            border-color: rgba(0, 168, 255, 0.8);
         }
 
         .skill-item i {
@@ -458,7 +469,7 @@
 
         .mobile-skill-item:hover {
             transform: translateY(-3px);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.7);
         }
 
         .common-skills {
@@ -481,6 +492,8 @@
             transition: var(--transition);
             border: 1px solid rgba(0, 168, 255, 0.3);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
         }
 
         .light-mode .common-skill-item {
@@ -489,13 +502,34 @@
 
         .common-skill-item:hover {
             transform: translateY(-5px);
-            box-shadow: var(--glow);
-            border-color: rgba(0, 168, 255, 0.6);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.8), 0 0 50px rgba(152, 136, 255, 0.6);
+            border-color: rgba(0, 168, 255, 0.8);
+        }
+
+        .common-skill-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 168, 255, 0.2), transparent);
+            transition: left 0.7s ease;
+        }
+
+        .common-skill-item:hover::before {
+            left: 100%;
         }
 
         .common-skill-item i {
             font-size: 2rem;
             color: var(--primary);
+            transition: var(--transition);
+        }
+
+        .common-skill-item:hover i {
+            transform: scale(1.2);
+            color: var(--secondary);
         }
 
         /* Projects Section */
@@ -542,7 +576,7 @@
 
         .project-card:hover {
             transform: translateY(-12px);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.8), 0 0 60px rgba(152, 136, 255, 0.6);
         }
 
         .project-img {
@@ -554,6 +588,17 @@
             justify-content: center;
             font-size: 4rem;
             color: var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-card:hover .project-img {
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+        }
+
+        .project-card:hover .project-img i {
+            color: white;
+            transform: scale(1.2);
         }
 
         .light-mode .project-img {
@@ -590,10 +635,16 @@
             font-size: 0.9rem;
             color: var(--light-gray);
             border: 1px solid rgba(0, 168, 255, 0.3);
+            transition: var(--transition);
         }
 
         .light-mode .tech-item {
             background: rgba(233, 236, 239, 0.8);
+        }
+
+        .project-card:hover .tech-item {
+            box-shadow: 0 0 10px rgba(0, 168, 255, 0.5);
+            border-color: rgba(0, 168, 255, 0.6);
         }
 
         .project-link {
@@ -616,7 +667,7 @@
 
         .project-link:hover {
             background: rgba(0, 168, 255, 0.4);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 15px rgba(0, 168, 255, 0.7);
             transform: translateY(-3px);
         }
 
@@ -702,7 +753,7 @@
 
         .start-project-btn:hover {
             transform: translateY(-8px) scale(1.05);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 30px rgba(0, 168, 255, 0.8), 0 0 60px rgba(152, 136, 255, 0.6);
         }
 
         /* Footer */
@@ -748,7 +799,7 @@
 
         .footer-social a:hover {
             transform: translateY(-8px) scale(1.1);
-            box-shadow: var(--glow);
+            box-shadow: 0 0 25px rgba(0, 168, 255, 0.8), 0 0 50px rgba(152, 136, 255, 0.6);
             background: rgba(0, 168, 255, 0.2);
         }
 
@@ -890,7 +941,7 @@
 <body>
     <!-- Theme Toggle -->
     <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-adjust"></i>
+        <i class="fas fa-moon"></i>
     </div>
 
     <!-- Header Section -->
@@ -1224,17 +1275,29 @@
     </footer>
 
     <script>
-        // Theme Toggle
+        // Theme Toggle - FIXED
         const themeToggle = document.getElementById('themeToggle');
         const body = document.body;
+        
+        // Check for saved theme preference or default to dark
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        if (savedTheme === 'light') {
+            body.classList.add('light-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        } else {
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+        }
         
         themeToggle.addEventListener('click', () => {
             body.classList.toggle('light-mode');
             
+            // Save theme preference
             if (body.classList.contains('light-mode')) {
-                themeToggle.innerHTML = '<i class="fas fa-adjust"></i>';
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
             } else {
-                themeToggle.innerHTML = '<i class="fas fa-adjust"></i>';
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
             }
         });
 
@@ -1291,7 +1354,7 @@
             });
         });
 
-        // Desktop Skills Animation
+        // Desktop Skills Animation - FIXED
         const frontendCircle = document.getElementById('frontendCircle');
         const backendCircle = document.getElementById('backendCircle');
         const skillItemsContainer = document.getElementById('skillItemsContainer');
@@ -1353,9 +1416,10 @@
         }
         
         function toggleSkills(circle, skills) {
+            // If skills are already active, remove them
             if (activeSkills.length > 0) {
                 activeSkills.forEach(skill => {
-                    document.getElementById(skill.id).classList.remove('active');
+                    skill.classList.remove('active');
                 });
                 activeSkills = [];
                 lines.forEach(line => line.remove());
@@ -1363,13 +1427,16 @@
                 return;
             }
 
+            // Position and activate skills
             positionSkills(circle, skills);
-            activeSkills = skills;
-
+            
+            // Add active class to all skills
             skills.forEach(skill => {
                 const skillEl = document.getElementById(skill.id);
                 skillEl.classList.add('active');
-
+                activeSkills.push(skillEl);
+                
+                // Create and activate lines
                 const line = document.createElement('div');
                 line.classList.add('skill-line');
                 skillItemsContainer.appendChild(line);
@@ -1409,7 +1476,7 @@
                 if (!frontendCircle.contains(e.target) && !backendCircle.contains(e.target) && 
                     !skillItemsContainer.contains(e.target)) {
                     activeSkills.forEach(skill => {
-                        document.getElementById(skill.id).classList.remove('active');
+                        skill.classList.remove('active');
                     });
                     activeSkills = [];
                     lines.forEach(line => line.remove());
